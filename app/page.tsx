@@ -3,6 +3,7 @@ import Header from "@/components/Header"
 import Events from "@/components/Events"
 import Partners from "@/components/Partners";
 import Process from  "@/components/Process"
+import Footer from "@/components/Footer";
 
 
 
@@ -14,6 +15,7 @@ export default function Home() {
       <Events />
       <Partners />
       <Process />
+      <Footer />
     </div>
   );
 }

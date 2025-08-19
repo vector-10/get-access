@@ -1,8 +1,8 @@
 import React from 'react';
-import { Shield, Search, Ticket, User, CheckCircle, ArrowRight, LucideIcon } from 'lucide-react';
+import { Shield, Search, Ticket, User, CheckCircle, ArrowRight } from 'lucide-react';
 
 interface ProcessCardProps {
-    icon: LucideIcon;
+    icon: React.ComponentType<{ className?: string }>;
     title: string;
     description: string;
     feature: string;
@@ -13,7 +13,11 @@ interface ProcessCardProps {
 
 const Process = () => {
     const ProcessCard: React.FC<ProcessCardProps> = ({ icon: Icon, title, description, feature, bgClass, hoverClass, decorations }) => (
-        <div className={`relative ${bgClass} ${hoverClass} rounded-3xl p-8 text-white overflow-hidden h-112 md:w-auto w-104 flex-shrink-0 transition-all duration-300 cursor-pointer`}>
+        <div className={`relative ${bgClass} ${hoverClass} rounded-3xl p-8 text-white overflow-hidden flex-shrink-0 transition-all duration-300 cursor-pointer`} 
+             style={{ 
+                 height: '627px',  // 40% increase from original h-112 (448px)
+                 width: '541px'    // 30% increase from original w-104 (416px)
+             }}>
             <div className="relative z-10">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
                     <Icon className="h-8 w-8 text-white" />
@@ -39,8 +43,8 @@ const Process = () => {
             title: "Civic Verify",
             description: "Secure your identity with Civic Auth's blockchain-based verification system. One-time setup, lifetime trust.",
             feature: "Blockchain secured",
-            bgClass: "bg-gradient-to-br from-orange-500 to-orange-600",
-            hoverClass: "hover:from-orange-400 hover:to-orange-500",
+            bgClass: "bg-gradient-to-br from-orange-400 to-orange-500",
+            hoverClass: "hover:from-orange-600 hover:to-orange-700",
             decorations: (
                 <>
                     <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full"></div>
@@ -63,8 +67,8 @@ const Process = () => {
             title: "Discover Events",
             description: "Browse verified Web3 events across Nigeria. Filter by location, date, and category to find your perfect match.",
             feature: "Verified organizers only",
-            bgClass: "bg-gradient-to-br from-gray-800 to-gray-900",
-            hoverClass: "hover:from-gray-700 hover:to-gray-800",
+            bgClass: "bg-gradient-to-br from-gray-700 to-gray-800",
+            hoverClass: "hover:from-gray-800 hover:to-gray-900",
             decorations: (
                 <>
                     <div className="absolute top-6 right-6">
@@ -91,8 +95,8 @@ const Process = () => {
             title: "Secure Attend",
             description: "Get your blockchain-secured ticket and attend with confidence. No fraud, no fake tickets, just seamless entry.",
             feature: "Fraud-proof tickets",
-            bgClass: "bg-gradient-to-br from-orange-400 to-amber-500",
-            hoverClass: "hover:from-orange-300 hover:to-amber-400",
+            bgClass: "bg-gradient-to-br from-orange-300 to-amber-400",
+            hoverClass: "hover:from-orange-500 hover:to-amber-600",
             decorations: (
                 <>
                     <div className="absolute top-8 right-8">
@@ -137,13 +141,13 @@ const Process = () => {
                 </div>
 
                 <div className="mb-16">
-                    <div className="hidden md:grid md:grid-cols-3 gap-8">
+                    <div className="hidden lg:flex lg:justify-center lg:space-x-8">
                         {cards.map((card, index) => (
                             <ProcessCard key={index} {...card} />
                         ))}
                     </div>
 
-                    <div className="md:hidden overflow-x-auto">
+                    <div className="lg:hidden overflow-x-auto">
                         <div className="flex space-x-6 px-4" style={{ width: 'fit-content' }}>
                             {cards.map((card, index) => (
                                 <ProcessCard key={index} {...card} />
@@ -181,4 +185,4 @@ const Process = () => {
     );
 }
 
-export default Process; 
+export default Process;
