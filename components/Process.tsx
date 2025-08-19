@@ -15,8 +15,8 @@ const Process = () => {
     const ProcessCard: React.FC<ProcessCardProps> = ({ icon: Icon, title, description, feature, bgClass, hoverClass, decorations }) => (
         <div className={`relative ${bgClass} ${hoverClass} rounded-3xl p-8 text-white overflow-hidden flex-shrink-0 transition-all duration-300 cursor-pointer`} 
              style={{ 
-                 height: '627px',  // 40% increase from original h-112 (448px)
-                 width: '541px'    // 30% increase from original w-104 (416px)
+                 height: '627px',  
+                 width: '541px'   
              }}>
             <div className="relative z-10">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6">
@@ -165,7 +165,7 @@ const Process = () => {
                     </p>
                     
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <button className="bg-orange-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-700 transition-colors flex items-center space-x-2 shadow-lg">
+                        <button className="bg-orange-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-800 transition-colors flex items-center space-x-2 shadow-lg">
                             <span>Get Started</span>
                             <ArrowRight className="h-5 w-5" />
                         </button>

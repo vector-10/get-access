@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Get Access!    Swift Event Tickeing and Management",
+  title: "getAccess!    Swift Event Tickeing and Management",
   description: "Swift Event Tickeing and Management for Web3/Blockchain Events",
 };
 

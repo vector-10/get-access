@@ -28,34 +28,30 @@ export default function Header() {
           setLocation(locationName)
         } catch (error) {
           console.log('Error getting location name:', error)
-          setLocation('Lagos') // Fallback to Lagos
+          setLocation('Lagos') 
         } finally {
           setIsLoadingLocation(false)
         }
       },
       (error) => {
         console.log('Location access denied or failed:', error)
-        setLocation('Lagos') // Fallback to Lagos
+        setLocation('Lagos')
         setIsLoadingLocation(false)
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 300000 // 5 minutes cache
+        maximumAge: 300000 
       }
     )
   }
 
-  // Simple reverse geocoding using a free API
   const reverseGeocode = async (lat:any, lng:any) => {
     try {
-      // Using OpenStreetMap Nominatim API (free, no key required)
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
       )
       const data = await response.json()
-      
-      // Extract city/state from response
       const city = data.address?.city || 
                   data.address?.town || 
                   data.address?.village || 
@@ -80,17 +76,12 @@ export default function Header() {
     <>
       <header className="bg-white border-b border-gray-200 relative z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex flex-row items-center justify-between space-x-4">
-            
+          <div className="flex flex-row items-center justify-between space-x-4">            
 
             <div className="flex-shrink-0">
-              <span className="text-2xl font-bold text-orange-600">Get Access</span>
+              <span className="text-2xl font-bold text-orange-600">getAccess</span>
             </div>
-
-
             <div className="flex-1"></div>
-
-
             <div className="hidden md:flex flex-shrink-0 items-center space-x-4">
               <a href="#" className="text-gray-700 hover:text-orange-600 transition-colors">
                 Events
@@ -106,7 +97,6 @@ export default function Header() {
                 Create Events
               </button>
             </div>
-
 
             <div className="md:hidden flex-shrink-0">
               <button
