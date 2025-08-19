@@ -29,15 +29,45 @@ const slides = [
   }
 ]
 
-
 export default function HeroCarousel() {
   return (
-    <div className="w-full px-[4rem] md:px-8 py-[2rem]">
+    <div className="w-full px-4 md:px-8 py-8 md:py-[2rem]">
+      <style jsx global>{`
+        .custom-pagination {
+          position: absolute !important;
+          bottom: 20px !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          width: auto !important;
+          display: flex !important;
+          gap: 8px !important;
+          z-index: 10 !important;
+        }
+        
+        .custom-pagination .swiper-pagination-bullet {
+          width: 40px !important;
+          height: 4px !important;
+          border-radius: 2px !important;
+          background: rgba(255, 255, 255, 0.4) !important;
+          opacity: 1 !important;
+          transition: all 0.3s ease !important;
+          margin: 0 !important;
+        }
+        
+        .custom-pagination .swiper-pagination-bullet-active {
+          background: #ea580c !important;
+          width: 60px !important;
+        }
+      `}</style>
+      
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}
-        pagination={{ clickable: true }}
-        className="w-full rounded-2xl"
+        pagination={{ 
+          clickable: true,
+          el: '.custom-pagination'
+        }}
+        className="w-full h-[30vh] md:h-auto rounded-2xl relative"
       >
         {slides.map((slide: SlideData, index: number) => (
           <SwiperSlide key={index} className="relative">
@@ -48,8 +78,6 @@ export default function HeroCarousel() {
                 className="w-full h-full object-cover"
               />
               
-              
-              {/* Text content */}
               <div className="absolute bottom-8 left-8 text-white">
                 <h2 className="text-3xl font-bold mb-2">{slide.title}</h2>
                 <p className="text-lg opacity-90">{slide.subtitle}</p>
@@ -57,6 +85,8 @@ export default function HeroCarousel() {
             </div>
           </SwiperSlide>
         ))}
+        
+        <div className="custom-pagination"></div>
       </Swiper>
     </div>
   )
