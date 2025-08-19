@@ -21,7 +21,7 @@ const Footer = () => {
               <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center">
                 <Ticket className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">Get Access</span>
+              <span className="text-2xl font-bold">getAccess</span>
             </div>
             
             <p className="text-gray-300 mb-4 leading-relaxed">
