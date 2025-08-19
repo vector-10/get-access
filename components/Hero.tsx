@@ -31,7 +31,7 @@ const slides = [
 
 export default function HeroCarousel() {
   return (
-    <div className="w-full px-4 md:px-8 py-8 md:py-[2rem]">
+    <div className="w-full px-4 md:px-[4rem] py-8 md:py-[2rem]">
       <style jsx global>{`
         .custom-pagination {
           position: absolute !important;
