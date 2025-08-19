@@ -11,27 +11,28 @@ interface SlideData {
   subtitle: string
 }
 
-const slides: SlideData[] = [
+const slides = [
   {
-    image: "/event1.jpg",
+    image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=1200&h=400&fit=crop&crop=center",
     title: "OnChain Conference Lagos 2025",
     subtitle: "Join 1000+ Web3 builders"
   },
   {
-    image: "/event2.jpg", 
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=400&fit=crop&crop=center",
     title: "Web3 Lagos Meetup",
-    subtitle: "Network with crypto enthusiasts"
+    subtitle: "Network with crypto enthusiasts" 
   },
   {
-    image: "/event3.jpg",
-    title: "Nigeria Blockchain Summit",
-    subtitle: "Learn from industry leaders"
+    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&h=400&fit=crop&crop=center",
+    title: "Block Party 2025",
+    subtitle: "Move Your Body"
   }
 ]
 
+
 export default function HeroCarousel() {
   return (
-    <div className="w-full px-4 md:px-8">
+    <div className="w-full px-[4rem] md:px-8">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}
@@ -47,8 +48,6 @@ export default function HeroCarousel() {
                 className="w-full h-full object-cover"
               />
               
-              {/* Colorful smoke gradient */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-900/80 via-pink-500/40 to-transparent" />
               
               {/* Text content */}
               <div className="absolute bottom-8 left-8 text-white">
