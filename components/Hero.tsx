@@ -32,12 +32,12 @@ const slides = [
 
 export default function HeroCarousel() {
   return (
-    <div className="w-full px-[4rem] md:px-8">
+    <div className="w-full px-[4rem] md:px-8 py-[2rem]">
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 4000 }}
         pagination={{ clickable: true }}
-        className="w-full h-[400px] rounded-2xl"
+        className="w-full rounded-2xl"
       >
         {slides.map((slide: SlideData, index: number) => (
           <SwiperSlide key={index} className="relative">
