@@ -156,7 +156,7 @@ export default function UpcomingEventsSection() {
     : events.filter(event => event.category === activeCategory)
 
   return (
-    <section className="w-full px-4 md:px-8 py-12 bg-gray-50">
+    <section id="events" className="w-full px-4 md:px-8 py-12 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         
         <div className="mb-8">

@@ -74,7 +74,7 @@ export default function Header() {
 
   return (
     <>
-     <header className="bg-white border-b border-gray-200 relative z-50 sticky top-0">
+     <header className="bg-white border-b border-gray-200  z-50 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex flex-row items-center justify-between space-x-4">  
             <div className="flex-shrink-0 flex items-center">              
@@ -83,7 +83,7 @@ export default function Header() {
             </div>
             <div className="flex-1"></div>
             <div className="hidden md:flex flex-shrink-0 items-center space-x-4">
-              <a href="#" className="text-gray-700 hover:text-orange-600 transition-colors">
+              <a href="#events" className="text-gray-700 hover:text-orange-600 transition-colors">
                 Events
               </a>
               <a href="#" className="text-gray-700 hover:text-orange-600 transition-colors">
