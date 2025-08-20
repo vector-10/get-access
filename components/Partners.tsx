@@ -10,7 +10,7 @@ const Partners = () => {
     const duplicatedPartners = [...partners, ...partners];
 
     return (
-        <section className="w-full py-12 bg-white overflow-hidden">
+        <section id="partners" className="w-full py-12 bg-white overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 md:px-8">
                 
                 <div className="mb-8">

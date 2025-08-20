@@ -86,10 +86,10 @@ export default function Header() {
               <a href="#events" className="text-gray-700 hover:text-orange-600 transition-colors">
                 Events
               </a>
-              <a href="#" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Contact
+              <a href="#process" className="text-gray-700 hover:text-orange-600 transition-colors">
+                Process
               </a>
-              <a href="#" className="text-gray-700 hover:text-orange-600 transition-colors">
+              <a href="#partners" className="text-gray-700 hover:text-orange-600 transition-colors">
                 Partners
               </a>              
 
@@ -137,16 +137,13 @@ export default function Header() {
         <div className="p-6 space-y-6">   
 
           <div className="  space-y-6">
-            <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              How It Works
+            <a href="#process" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
+            Process
             </a>
-            <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
+            <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               Events
             </a>
-            <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              Contact
-            </a>
-            <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
+            <a href="#partners" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               Partners
             </a>
           </div>
