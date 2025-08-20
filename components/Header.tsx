@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { MapPin, Menu, X, Phone, Plus } from 'lucide-react'
+import { MapPin, Menu, X, Phone, Plus, Ticket } from 'lucide-react'
 
 export default function Header() {
   const [location, setLocation] = useState('Lagos')
@@ -10,7 +10,7 @@ export default function Header() {
 
   useEffect(() => {
     detectUserLocation()
-  }, [])
+  })
 
   const detectUserLocation = async () => {
     if (!navigator.geolocation) {
@@ -46,7 +46,7 @@ export default function Header() {
     )
   }
 
-  const reverseGeocode = async (lat:any, lng:any) => {
+  const reverseGeocode = async (lat:number, lng:number) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
@@ -59,7 +59,7 @@ export default function Header() {
                   'Lagos'
       
       return city
-    } catch (error) {
+    } catch  {
       throw new Error('Geocoding failed')
     }
   }
@@ -76,10 +76,10 @@ export default function Header() {
     <>
       <header className="bg-white border-b border-gray-200 relative z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex flex-row items-center justify-between space-x-4">            
-
-            <div className="flex-shrink-0">
+          <div className="flex flex-row items-center justify-between space-x-4">  
+            <div className="flex-shrink-0 flex items-center">              
               <span className="text-2xl font-bold text-orange-600">getAccess</span>
+              <Ticket className="h-6 w-6 text-orange-600" />
             </div>
             <div className="flex-1"></div>
             <div className="hidden md:flex flex-shrink-0 items-center space-x-4">

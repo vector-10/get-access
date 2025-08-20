@@ -1,7 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MapPin, Calendar, Clock, Shield } from 'lucide-react'
+import Image from 'next/image'
+
 
 interface Event {
   id: string
@@ -93,7 +95,61 @@ const filters = ['Price', 'Date', 'Location']
 
 export default function UpcomingEventsSection() {
   const [activeCategory, setActiveCategory] = useState('All Events')
-  const [activeFilter, setActiveFilter] = useState('')
+  const [userLocation, setUserLocation] = useState('')
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false)
+
+  useEffect(() => {
+    detectUserLocation()
+  })
+  
+  const detectUserLocation = async () => {
+    if (!navigator.geolocation) {
+      console.log('Geolocation not supported')
+      return
+    }
+  
+    setIsLoadingLocation(true)
+    
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords
+          const country = await reverseGeocode(latitude, longitude)
+          setUserLocation(country)
+        } catch (error) {
+          console.log('Error getting location:', error)
+          setUserLocation('') 
+        } finally {
+          setIsLoadingLocation(false)
+        }
+      },
+      (error) => {
+        console.log('Location access denied:', error)
+        setUserLocation('') 
+        setIsLoadingLocation(false)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 
+      }
+    )
+  }
+  
+  const reverseGeocode = async (lat:number, lng:number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=3&addressdetails=1`
+      )
+      const data = await response.json()
+      
+      const country = data.address?.country || 'Nigeria'
+      return country
+    } catch  {
+      throw new Error('Geocoding failed')
+    }
+  }
+  
 
   const filteredEvents = activeCategory === 'All Events' 
     ? events 
@@ -109,7 +165,9 @@ export default function UpcomingEventsSection() {
               <h2 className="text-3xl font-bold text-gray-900 mb-2">Find an event in:</h2>
               <div className="flex items-center space-x-2 text-orange-600">
                 <MapPin className="h-5 w-5" />
-                <span className="font-medium">Nigeria</span>
+                <span className="font-medium">
+                  {isLoadingLocation ? 'Detecting location...' : userLocation}
+                </span>
               </div>
             </div>
           </div>
@@ -156,16 +214,18 @@ export default function UpcomingEventsSection() {
                 )}
                 
                 {event.isVerified && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white p-1.5 rounded-full z-10">
+                  <div className="absolute top-4 right-4 bg-[#8174fc] text-white p-1.5 rounded-full z-10">
                     <Shield className="h-3 w-3" />
                   </div>
                 )}
 
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                  <Image
+                    fill
+                    src={event.image}
+                    alt={event.title}
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    quality={90}
+                  />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -208,7 +268,7 @@ export default function UpcomingEventsSection() {
                 </div>
 
                 {event.isVerified && (
-                  <div className="mt-3 flex items-center space-x-1 text-green-600 text-xs">
+                  <div className="mt-3 flex items-center space-x-1 text-[#8174fc] text-xs">
                     <Shield className="h-3 w-3" />
                     <span>Civic Verified Organizer</span>
                   </div>

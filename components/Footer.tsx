@@ -2,12 +2,9 @@ import React from 'react';
 import { 
   Mail, 
   MapPin, 
-  Twitter, 
-  Github,
-  Linkedin,
   Ticket,
   Shield,
-  Globe
+  LockKeyhole
 } from 'lucide-react';
 
 const Footer = () => {
@@ -17,25 +14,25 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           <div>
-            <div className="flex items-center space-x-2 mb-4">
+            <div className="flex items-center space-x-2 mb-4">              
+              <span className="text-2xl font-bold">getAccess</span>
               <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center">
                 <Ticket className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold">getAccess</span>
             </div>
             
             <p className="text-gray-300 mb-4 leading-relaxed">
-              Secure Web3 event ticketing for Nigeria's blockchain community.
+              Secure Web3 event ticketing for the Global blockchain community.
             </p>
             
             <div className="space-y-2">
               <div className="flex items-center space-x-3 text-gray-300">
                 <MapPin className="h-4 w-4 text-orange-500" />
-                <span className="text-sm">Lagos, Nigeria</span>
+                <span className="text-sm">Planet Earth</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <Mail className="h-4 w-4 text-orange-500" />
-                <span className="text-sm">hello@getaccess.ng</span>
+                <span className="text-sm">hello@getaccess.io</span>
               </div>
             </div>
           </div>
@@ -73,22 +70,12 @@ const Footer = () => {
                 <span>Civic Auth Verified</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Globe className="h-4 w-4 text-orange-500" />
+                  <LockKeyhole  className="h-4 w-4 text-orange-500"/>
                 <span>Blockchain Secured</span>
               </div>
             </div>
             
-            <div className="flex space-x-3">
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors group">
-                <Twitter className="h-4 w-4 text-gray-400 group-hover:text-white" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors group">
-                <Github className="h-4 w-4 text-gray-400 group-hover:text-white" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors group">
-                <Linkedin className="h-4 w-4 text-gray-400 group-hover:text-white" />
-              </a>
-            </div>
+            
           </div>
         </div>
       </div>

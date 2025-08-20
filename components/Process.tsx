@@ -38,30 +38,7 @@ const Process = () => {
     );
 
     const cards = [
-        {
-            icon: Shield,
-            title: "Civic Verify",
-            description: "Secure your identity with Civic Auth's blockchain-based verification system. One-time setup, lifetime trust.",
-            feature: "Blockchain secured",
-            bgClass: "bg-gradient-to-br from-orange-400 to-orange-500",
-            hoverClass: "hover:from-orange-600 hover:to-orange-700",
-            decorations: (
-                <>
-                    <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full"></div>
-                    <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/5 rounded-full"></div>
-                    <div className="absolute bottom-4 left-4">
-                        <div className="flex space-x-2">
-                            <div className="w-3 h-3 bg-white/30 rounded-full"></div>
-                            <div className="w-3 h-3 bg-white/20 rounded-full"></div>
-                            <div className="w-3 h-3 bg-white/10 rounded-full"></div>
-                        </div>
-                    </div>
-                    <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
-                        <User className="h-12 w-12 text-white/20" />
-                    </div>
-                </>
-            )
-        },
+        
         {
             icon: Search,
             title: "Discover Events",
@@ -91,8 +68,32 @@ const Process = () => {
             )
         },
         {
+            icon: Shield,
+            title: "Verify ID",
+            description: "Secure your identity with Civic Auth's blockchain-based verification system. One-time setup, lifetime trust.",
+            feature: "Blockchain secured",
+            bgClass: "bg-gradient-to-br from-orange-400 to-orange-500",
+            hoverClass: "hover:from-orange-600 hover:to-orange-700",
+            decorations: (
+                <>
+                    <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full"></div>
+                    <div className="absolute -top-8 -right-8 w-40 h-40 bg-white/5 rounded-full"></div>
+                    <div className="absolute bottom-4 left-4">
+                        <div className="flex space-x-2">
+                            <div className="w-3 h-3 bg-white/30 rounded-full"></div>
+                            <div className="w-3 h-3 bg-white/20 rounded-full"></div>
+                            <div className="w-3 h-3 bg-white/10 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div className="absolute top-1/2 right-6 transform -translate-y-1/2">
+                        <User className="h-12 w-12 text-white/20" />
+                    </div>
+                </>
+            )
+        },
+        {
             icon: Ticket,
-            title: "Secure Attend",
+            title: "Secure Your Spot",
             description: "Get your blockchain-secured ticket and attend with confidence. No fraud, no fake tickets, just seamless entry.",
             feature: "Fraud-proof tickets",
             bgClass: "bg-gradient-to-br from-orange-300 to-amber-400",
@@ -136,7 +137,7 @@ const Process = () => {
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-bold text-gray-900 mb-4">How Access Works</h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Get verified, discover amazing events, and enjoy secure ticketing - all in three simple steps
+                    Discover amazing events, Verify Identity and enjoy secure ticketing - all in three simple steps
                     </p>
                 </div>
 
@@ -161,22 +162,22 @@ const Process = () => {
                         Ready to Experience Secure Event Ticketing?
                     </h3>
                     <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                        Join thousands of Web3 enthusiasts who trust Access for verified, fraud-proof event experiences across Nigeria.
+                        Join thousands of Web3 enthusiasts who trust Access for verified, fraud-proof event experiences Globally!
                     </p>
                     
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <button className="bg-orange-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-800 transition-colors flex items-center space-x-2 shadow-lg">
-                            <span>Get Started</span>
+                            <span>Find an Event</span>
                             <ArrowRight className="h-5 w-5" />
                         </button>
                         
-                        <button className="text-orange-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-50 transition-colors border-2 border-orange-200">
-                            Start Organizing Events
+                        <button className="text-orange-600 flex items-center justify-around px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-50 transition-colors border-2 border-orange-200">
+                            <h2>Start Organizing Events</h2>   <ArrowRight className="h-5 w-5" />
                         </button>
                     </div>
                     
                     <p className="text-sm text-gray-500 mt-6">
-                        Powered by Civic Auth • Trusted by 50,000+ users • 100% verified organizers
+                        Powered by <a href="https://www.civic.com/" className='text-[#6b70fc]'>Civic Auth</a> • Trusted by 50,000+ users • 100% verified organizers
                     </p>
                 </div>
                 

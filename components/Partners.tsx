@@ -3,8 +3,8 @@ import React from 'react';
 
 const Partners = () => {
     const partners = [
-        "Binance", "Coinbase", "Polygon", "Chainlink", "Uniswap", 
-        "OpenSea", "MetaMask", "Civic", "Solana", "Ethereum Foundation"
+        "Binance", "Coinbase", "Polygon", "Chainlink", "Uniswap", "Solana",
+        "OpenSea", "MetaMask", "Civic Auth", "Solana", "Ethereum Foundation"
     ];
 
     const duplicatedPartners = [...partners, ...partners];

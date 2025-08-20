@@ -4,14 +4,16 @@ import Events from "@/components/Events"
 import Partners from "@/components/Partners";
 import Process from  "@/components/Process"
 import Footer from "@/components/Footer";
+import Access from "@/components/Access";
 
 
 
 export default function Home() {
   return (
     <div className="">
-      <Header />  
+      <Header /> 
       <Hero />
+      <Access /> 
       <Events />
       <Partners />
       <Process />

@@ -2,6 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
+import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
@@ -19,13 +20,13 @@ const slides = [
   },
   {
     image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&h=400&fit=crop&crop=center",
-    title: "After Block party",
+    title: "After Block party Lagos",
     subtitle: "Vibes, Dance, Memories"
   },
   {
     image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=400&fit=crop&crop=center",
-    title: "Web3 Lagos Meetup",
-    subtitle: "Network with crypto enthusiasts" 
+    title: "ETHDenver Colorado US",
+    subtitle: "Build the Decentralized Future!" 
   }
  
 ]
@@ -62,34 +63,38 @@ export default function HeroCarousel() {
       `}</style>
       
       <Swiper
-        modules={[Autoplay, Pagination]}
-        autoplay={{ delay: 4000 }}
-        pagination={{ 
-          clickable: true,
-          el: '.custom-pagination'
-        }}
-        className="w-full h-[40vh] md:h-auto rounded-2xl relative"
-      >
-        {slides.map((slide: SlideData, index: number) => (
-          <SwiperSlide key={index} className="relative">
-            <div className="relative w-full h-full">
-              <img 
-                src={slide.image} 
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/40"></div>
-              
-              <div className="absolute bottom-12 left-10 text-white">
-                <h2 className="text-2xl md:text-5xl font-bold mb-2">{slide.title}</h2>
-                <p className="text-lg md:text-xl opacity-90">{slide.subtitle}</p>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
+  modules={[Autoplay, Pagination]}
+  autoplay={{ delay: 4000 }}
+  pagination={{
+    clickable: true,
+    el: '.custom-pagination'
+  }}
+  className="w-full h-[40vh] md:h-[500px] rounded-2xl relative"
+>
+  {slides.map((slide: SlideData, index: number) => (
+    <SwiperSlide key={index} className="relative h-full">
+      <div className="relative w-full h-full">
+        <Image
+          width={1200}
+          height={500}
+          src={slide.image}
+          alt={slide.title}
+          className="w-full h-full object-cover"
+          quality={90}
+          priority={index === 0}
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
         
-        <div className="custom-pagination"></div>
-      </Swiper>
+        <div className="absolute bottom-12 left-10 text-white">
+          <h2 className="text-2xl md:text-5xl font-bold mb-2">{slide.title}</h2>
+          <p className="text-lg md:text-xl opacity-90">{slide.subtitle}</p>
+        </div>
+      </div>
+    </SwiperSlide>
+  ))}
+  
+  <div className="custom-pagination"></div>
+</Swiper>
     </div>
   )
 }
