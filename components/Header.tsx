@@ -74,7 +74,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 relative z-50">
+     <header className="bg-white border-b border-gray-200 relative z-50 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex flex-row items-center justify-between space-x-4">  
             <div className="flex-shrink-0 flex items-center">              
@@ -124,7 +124,7 @@ export default function Header() {
       }`}>
         
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <span className="text-xl font-bold text-orange-600">Get Access</span>
+          <span className="text-xl font-bold text-orange-600">getAccess</span>
           <button
             onClick={closeMobileMenu}
             className="p-2 rounded-md text-gray-700 hover:text-orange-600 hover:bg-gray-100 transition-colors"
@@ -134,48 +134,26 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
-          
-          <div className="flex items-center space-x-3 text-gray-600">
-            <MapPin className="h-5 w-5" />
-            <span>
-              {isLoadingLocation ? 'Detecting location...' : `Events in ${location}`}
-            </span>
-          </div>
+        <div className="p-6 space-y-6">   
 
-          <div className="space-y-4">
-            <a 
-              href="#" 
-              className="flex items-center space-x-3 text-gray-700 hover:text-orange-600 py-3 transition-colors"
-              onClick={closeMobileMenu}
-            >
-              <Phone className="h-5 w-5" />
-              <span>Contact Support</span>
-            </a>
-          </div>
-
-          <button 
-            className="w-full bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center justify-center space-x-2"
-            onClick={closeMobileMenu}
-          >
-            <Plus className="h-5 w-5" />
-            <span>Create Events</span>
-          </button>
-
-          <div className="pt-4 border-t border-gray-200 space-y-3">
+          <div className="  space-y-6">
             <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               How It Works
             </a>
             <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              Pricing
+              Events
             </a>
             <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              Help Center
+              Contact
             </a>
             <a href="#" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              About Us
+              Partners
             </a>
           </div>
+
+          <button className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors">
+                Create Events
+              </button>
 
           <div className="pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
