@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { MapPin, Menu, X, Phone, Plus, Ticket } from 'lucide-react'
+import {  Menu, X, Ticket } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Header() {
   const [location, setLocation] = useState('Lagos')
@@ -78,7 +79,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex flex-row items-center justify-between space-x-4">  
             <div className="flex-shrink-0 flex items-center">              
-              <span className="text-2xl font-bold text-orange-600">getAccess</span>
+              <Link href="/" className="text-2xl font-bold text-orange-600">getAccess</Link>
               <Ticket className="h-6 w-6 text-orange-600" />
             </div>
             <div className="flex-1"></div>
@@ -93,9 +94,9 @@ export default function Header() {
                 Partners
               </a>              
 
-              <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors">
+              <Link href="dashboard/create-events" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors">
                 Create Events
-              </button>
+              </Link>
             </div>
 
             <div className="md:hidden flex-shrink-0">
@@ -137,20 +138,20 @@ export default function Header() {
         <div className="p-6 space-y-6">   
 
           <div className="  space-y-6">
-            <a href="#process" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-            Process
-            </a>
-            <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
+          <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               Events
             </a>
+            <a href="#process" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
+            Process
+            </a>           
             <a href="#partners" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               Partners
             </a>
           </div>
 
-          <button className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors">
+          <Link href="/dashboard/create-events" className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors">
                 Create Events
-              </button>
+              </Link>
 
           <div className="pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, CheckCircle, Users, Ticket, ArrowRight } from 'lucide-react';
+import Link from 'next/link'
 import Image from 'next/image'
 
 const Access = () => {
@@ -69,7 +70,7 @@ const Access = () => {
                         {/* CTA */}
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button className="bg-orange-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-700 transition-colors flex items-center justify-center space-x-2 shadow-lg">
-                                <span>Explore Events</span>
+                                <Link href="/events">Explore Events</Link>
                                 <ArrowRight className="h-5 w-5" />
                             </button>
                         </div>

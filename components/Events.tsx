@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { MapPin, Calendar, Clock, Shield } from 'lucide-react'
+import Link from 'next/link'
 import Image from 'next/image'
 
 
@@ -279,9 +280,9 @@ export default function UpcomingEventsSection() {
         </div>
 
         <div className="mt-12 text-center">
-          <button className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors font-medium">
+          <Link href="/events" className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors font-medium">
             View All Events
-          </button>
+          </Link>
         </div>
         
       </div>
