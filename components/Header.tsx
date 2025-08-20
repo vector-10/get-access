@@ -2,9 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import {  Menu, X, Ticket } from 'lucide-react'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Header() {
+  const { publicKey, connected } = useWallet()
+  const router = useRouter()
   const [location, setLocation] = useState('Lagos')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -92,11 +96,20 @@ export default function Header() {
               </a>
               <a href="#partners" className="text-gray-700 hover:text-orange-600 transition-colors">
                 Partners
-              </a>              
+              </a>          
 
-              <Link href="dashboard/create-events" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors">
-                Create Events
-              </Link>
+               {connected && (
+                  <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full">
+                    ✓ Authenticated
+                  </span>
+                )}    
+
+                <Link 
+                    href={connected ? "/dashboard/create-events" : "/auth"}
+                    className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors"
+                  >
+                    Create Events
+                  </Link>
             </div>
 
             <div className="md:hidden flex-shrink-0">
@@ -137,7 +150,7 @@ export default function Header() {
 
         <div className="p-6 space-y-6">   
 
-          <div className="  space-y-6">
+          <div className="space-y-6">
           <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
               Events
             </a>
@@ -149,9 +162,18 @@ export default function Header() {
             </a>
           </div>
 
-          <Link href="/dashboard/create-events" className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors">
-                Create Events
-              </Link>
+          {connected && (
+              <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full inline-block">
+                ✓ Authenticated
+              </span>
+            )}
+
+              <Link 
+                  href={connected ? "/dashboard/create-events" : "/auth"}
+                  className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors block text-center"
+                >
+                  Create Events
+                </Link>
 
           <div className="pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
