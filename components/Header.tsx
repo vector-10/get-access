@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import {  Menu, X, Ticket } from 'lucide-react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { Menu, X, Ticket } from 'lucide-react'
+import { useUser } from '@civic/auth-web3/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Header() {
-  const { publicKey, connected } = useWallet()
+  const { user } = useUser()  
   const router = useRouter()
   const [location, setLocation] = useState('Lagos')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
@@ -15,7 +15,7 @@ export default function Header() {
 
   useEffect(() => {
     detectUserLocation()
-  })
+  }, [])
 
   const detectUserLocation = async () => {
     if (!navigator.geolocation) {
@@ -24,7 +24,6 @@ export default function Header() {
     }
 
     setIsLoadingLocation(true)
-    
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
@@ -43,11 +42,7 @@ export default function Header() {
         setLocation('Lagos')
         setIsLoadingLocation(false)
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 300000 
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
     )
   }
 
@@ -57,29 +52,21 @@ export default function Header() {
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
       )
       const data = await response.json()
-      const city = data.address?.city || 
-                  data.address?.town || 
-                  data.address?.village || 
-                  data.address?.state ||
-                  'Lagos'
-      
+      const city = data.address?.city || data.address?.town || data.address?.village || data.address?.state || 'Lagos'
       return city
-    } catch  {
+    } catch {
       throw new Error('Geocoding failed')
     }
   }
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-  }
+  const isAuthenticated = !!user
 
   return (
     <>
-     <header className="bg-white border-b border-gray-200  z-50 sticky top-0">
+      <header className="bg-white border-b border-gray-200 z-50 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex flex-row items-center justify-between space-x-4">  
             <div className="flex-shrink-0 flex items-center">              
@@ -88,28 +75,22 @@ export default function Header() {
             </div>
             <div className="flex-1"></div>
             <div className="hidden md:flex flex-shrink-0 items-center space-x-4">
-              <a href="#events" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Events
-              </a>
-              <a href="#process" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Process
-              </a>
-              <a href="#partners" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Partners
-              </a>          
+              <a href="#events" className="text-gray-700 hover:text-orange-600 transition-colors">Events</a>
+              <a href="#process" className="text-gray-700 hover:text-orange-600 transition-colors">Process</a>
+              <a href="#partners" className="text-gray-700 hover:text-orange-600 transition-colors">Partners</a>          
 
-               {connected && (
-                  <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full">
-                    ✓ Authenticated
-                  </span>
-                )}    
+              {isAuthenticated && (
+                <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full">
+                  ✓ Authenticated
+                </span>
+              )}    
 
-                <Link 
-                    href={connected ? "/dashboard/create-events" : "/auth"}
-                    className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors"
-                  >
-                    Create Events
-                  </Link>
+              <Link 
+                href={isAuthenticated ? "/dashboard/create-events" : "/auth"}
+                className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors"
+              >
+                Create Events
+              </Link>
             </div>
 
             <div className="md:hidden flex-shrink-0">
@@ -121,7 +102,6 @@ export default function Header() {
                 <Menu className="h-6 w-6" />
               </button>
             </div>
-
           </div>
         </div>
       </header>
@@ -136,7 +116,6 @@ export default function Header() {
       <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
-        
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <span className="text-xl font-bold text-orange-600">getAccess</span>
           <button
@@ -149,38 +128,30 @@ export default function Header() {
         </div>
 
         <div className="p-6 space-y-6">   
-
           <div className="space-y-6">
-          <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              Events
-            </a>
-            <a href="#process" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-            Process
-            </a>           
-            <a href="#partners" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">
-              Partners
-            </a>
+            <a href="#events" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">Events</a>
+            <a href="#process" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">Process</a>           
+            <a href="#partners" className="block text-gray-600 hover:text-orange-600 py-2 transition-colors">Partners</a>
           </div>
 
-          {connected && (
-              <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full inline-block">
-                ✓ Authenticated
-              </span>
-            )}
+          {isAuthenticated && (
+            <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full inline-block">
+              ✓ Authenticated
+            </span>
+          )}
 
-              <Link 
-                  href={connected ? "/dashboard/create-events" : "/auth"}
-                  className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors block text-center"
-                >
-                  Create Events
-                </Link>
+          <Link 
+            href={isAuthenticated ? "/dashboard/create-events" : "/auth"}
+            className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors block text-center"
+          >
+            Create Events
+          </Link>
 
           <div className="pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
               Secure ticketing powered by Civic Auth
             </p>
           </div>
-
         </div>
       </div>
     </>

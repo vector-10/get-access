@@ -6,6 +6,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 
+interface IPApiResponse {
+  country_name?: string
+  error?: boolean
+  reason?: string
+}
+
 interface Event {
   id: string
   title: string
@@ -101,56 +107,28 @@ export default function UpcomingEventsSection() {
 
   useEffect(() => {
     detectUserLocation()
-  })
+  }, [])
+
   
-  const detectUserLocation = async () => {
-    if (!navigator.geolocation) {
-      console.log('Geolocation not supported')
-      return
-    }
-  
+  const detectUserLocation = async (): Promise<void> => {
     setIsLoadingLocation(true)
     
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords
-          const country = await reverseGeocode(latitude, longitude)
-          setUserLocation(country)
-        } catch (error) {
-          console.log('Error getting location:', error)
-          setUserLocation('') 
-        } finally {
-          setIsLoadingLocation(false)
-        }
-      },
-      (error) => {
-        console.log('Location access denied:', error)
-        setUserLocation('') 
-        setIsLoadingLocation(false)
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 300000 
-      }
-    )
-  }
-  
-  const reverseGeocode = async (lat:number, lng:number) => {
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=3&addressdetails=1`
-      )
-      const data = await response.json()
+      const response = await fetch('https://ipapi.co/json/')
+      const data: IPApiResponse = await response.json()
       
-      const country = data.address?.country || 'Nigeria'
-      return country
-    } catch  {
-      throw new Error('Geocoding failed')
+      if (data.error) {
+        throw new Error(data.reason || 'IP geolocation failed')
+      }
+      
+      setUserLocation(data.country_name || 'Nigeria')
+    } catch (error) {
+      console.log('Location detection failed:', error)
+      setUserLocation('Nigeria') 
+    } finally {
+      setIsLoadingLocation(false)
     }
   }
-  
 
   const filteredEvents = activeCategory === 'All Events' 
     ? events 
