@@ -26,9 +26,7 @@ function InteractiveGrid() {
     };
 
     document.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
+    return () => document.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   return (
@@ -48,35 +46,44 @@ function InteractiveGrid() {
 
 export default function AuthPage() {
   const router = useRouter();
-  const { user } = useUser(); // Civic hook gives you the logged-in user
+  const { user } = useUser();
 
   useEffect(() => {
-    if (user) {
-      console.log("User signed in:", user);
-      router.push("/dashboard/create-events");
-    }
+    const handleAuth = async () => {
+      if (!user) return;
+  
+      try {
+        const res = await fetch("/api/callback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            did: user.id, 
+            name: user.displayName || "Anonymous",
+          }),
+        });
+  
+        const data = await res.json();
+  
+        if (data.user.role === "organizer") {
+          router.push("/dashboard");
+        } else {
+          router.push("/events");
+        }
+      } catch (err) {
+        console.error("Auth error:", err);
+      }
+    };
+  
+    handleAuth();
   }, [user, router]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
-      {/* Interactive Grid Background */}
       <InteractiveGrid />
-
-      {/* Floating dots */}
-      <div className="absolute inset-0 z-5">
-        <div className="absolute top-20 left-20 w-2 h-2 bg-orange-300 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-32 w-3 h-3 bg-orange-400 rounded-full animate-bounce"></div>
-        <div className="absolute bottom-32 left-16 w-1 h-1 bg-orange-500 rounded-full animate-ping"></div>
-        <div className="absolute bottom-20 right-20 w-2 h-2 bg-orange-300 rounded-full animate-pulse"></div>
-        <div className="absolute top-60 left-1/3 w-1 h-1 bg-orange-400 rounded-full animate-bounce"></div>
-      </div>
-
-      {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
         <div className="w-full max-w-md">
-          {/* Auth Card */}
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20 animate-slide-up">
-            {/* Header */}
             <div className="text-center mb-8">
               <div className="flex items-center justify-center mb-4">
                 <Ticket className="h-8 w-8 text-orange-600 mr-2" />
@@ -90,7 +97,6 @@ export default function AuthPage() {
               </p>
             </div>
 
-            {/* Features */}
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3 text-sm text-gray-700">
                 <Shield className="h-5 w-5 text-green-500" />
@@ -106,21 +112,17 @@ export default function AuthPage() {
               </div>
             </div>
 
-            {/* Civic Auth Button */}
             <div className="space-y-4">
               <UserButton className="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition" />
             </div>
 
-            {/* Footer */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-xs text-gray-500 text-center">
-                By connecting, you agree to our Terms of Service and Privacy
-                Policy
+                By connecting, you agree to our Terms of Service and Privacy Policy
               </p>
             </div>
           </div>
 
-          {/* Back to Home */}
           <div className="text-center mt-6">
             <button
               onClick={() => router.push("/")}
