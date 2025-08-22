@@ -58,7 +58,7 @@ export default function DashboardHeader({ onMobileMenuToggle }: DashboardHeaderP
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center space-x-2 bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors border border-gray-300"
                 >
-                  <span>{user?.name || "User"}</span>
+                  <span>{user?.name || "John Doe"}</span>
                   <FaChevronDown className="w-3 h-3" />
                 </button>
 

@@ -1,9 +1,9 @@
 "use client";
 
 import { UserButton, useUser } from "@civic/auth-web3/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
-import { Ticket, Shield, Zap } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { Ticket, Shield, Zap, Check, Loader2 } from "lucide-react";
 
 function InteractiveGrid() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -44,15 +44,46 @@ function InteractiveGrid() {
   );
 }
 
+interface AuthStep {
+  id: string;
+  text: string;
+  icon: React.ReactNode;
+  status: 'pending' | 'loading' | 'completed';
+}
+
 export default function AuthPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useUser();
+  const [authSteps, setAuthSteps] = useState<AuthStep[]>([
+    { id: 'auth', text: 'Authentication successful', icon: <Shield className="h-5 w-5" />, status: 'pending' },
+    { id: 'verify', text: 'Identity verified with Civic', icon: <Check className="h-5 w-5" />, status: 'pending' },
+    { id: 'wallet', text: 'Wallet created', icon: <Zap className="h-5 w-5" />, status: 'pending' },
+    { id: 'redirect', text: 'Redirecting...', icon: <Ticket className="h-5 w-5" />, status: 'pending' }
+  ]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  const returnUrl = searchParams.get('returnUrl');
 
   useEffect(() => {
     const handleAuth = async () => {
-      if (!user) return;
+      if (!user || isProcessing) return;
   
+      setIsProcessing(true);
+
       try {
+        // Step 1: Authentication successful
+        await updateStepStatus('auth', 'loading');
+        await delay(800);
+        await updateStepStatus('auth', 'completed');
+
+        // Step 2: Identity verification
+        await updateStepStatus('verify', 'loading');
+        await delay(1000);
+        await updateStepStatus('verify', 'completed');
+
+        // Call the API to create/find user
         const res = await fetch("/api/callback", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -61,22 +92,123 @@ export default function AuthPage() {
             name: user.displayName || "Anonymous",
           }),
         });
-  
+
         const data = await res.json();
-  
-        if (data.user.role === "organizer") {
+        setUserRole(data.user.role);
+
+        // Step 3: Wallet creation (only for new attendees)
+        if (data.user.role === "attendee" && data.isNewUser) {
+          await updateStepStatus('wallet', 'loading');
+          await delay(1200);
+          await updateStepStatus('wallet', 'completed');
+        } else {
+          // Skip wallet step for organizers or existing users
+          setAuthSteps(prev => prev.filter(step => step.id !== 'wallet'));
+        }
+
+        // Step 4: Redirect
+        await updateStepStatus('redirect', 'loading');
+        await delay(800);
+        await updateStepStatus('redirect', 'completed');
+
+        // Final redirect
+        await delay(500);
+        if (returnUrl) {
+          router.push(returnUrl);
+        } else if (data.user.role === "organizer") {
           router.push("/dashboard");
         } else {
           router.push("/events");
         }
+
       } catch (err) {
         console.error("Auth error:", err);
+        setIsProcessing(false);
       }
     };
-  
-    handleAuth();
-  }, [user, router]);
 
+    handleAuth();
+  }, [user, router, returnUrl, isProcessing]);
+
+  const updateStepStatus = async (stepId: string, status: 'loading' | 'completed') => {
+    setAuthSteps(prev => prev.map(step => 
+      step.id === stepId ? { ...step, status } : step
+    ));
+  };
+
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const getStepIcon = (step: AuthStep) => {
+    if (step.status === 'loading') {
+      return <Loader2 className="h-5 w-5 animate-spin text-orange-600" />;
+    } else if (step.status === 'completed') {
+      return <Check className="h-5 w-5 text-green-600" />;
+    } else {
+      return <div className="h-5 w-5 rounded-full border-2 border-gray-300"></div>;
+    }
+  };
+
+  const getRedirectText = () => {
+    if (userRole === 'organizer') return 'Redirecting to dashboard...';
+    if (returnUrl) return 'Redirecting back to event...';
+    return 'Redirecting to events...';
+  };
+
+  if (user && isProcessing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
+        <InteractiveGrid />
+        <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+          <div className="w-full max-w-md">
+            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20">
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center mb-4">
+                  <Ticket className="h-8 w-8 text-orange-600 mr-2" />
+                  <h1 className="text-3xl font-bold text-gray-900">getAccess</h1>
+                </div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                  Setting up your account
+                </h2>
+                <p className="text-gray-600">
+                  Please wait while we verify your identity
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {authSteps.map((step, index) => (
+                  <div 
+                    key={step.id}
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-500 ${
+                      step.status === 'completed' ? 'bg-green-50' :
+                      step.status === 'loading' ? 'bg-orange-50' : 'bg-gray-50'
+                    }`}
+                    style={{
+                      opacity: step.status === 'pending' ? 0.5 : 1,
+                      transform: step.status === 'pending' ? 'translateX(-10px)' : 'translateX(0)',
+                    }}
+                  >
+                    {getStepIcon(step)}
+                    <span className={`text-sm font-medium ${
+                      step.status === 'completed' ? 'text-green-800' :
+                      step.status === 'loading' ? 'text-orange-800' : 'text-gray-600'
+                    }`}>
+                      {step.id === 'redirect' ? getRedirectText() : step.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 text-center">
+                <p className="text-xs text-gray-500">
+                  This may take a few seconds...
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
