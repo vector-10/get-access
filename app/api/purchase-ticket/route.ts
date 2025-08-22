@@ -25,13 +25,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (event.status !== 'active') {
+    // Allow purchases for upcoming and ongoing events (not completed)
+    if (event.status === 'completed') {
       return NextResponse.json(
-        { error: 'Event is not active' },
+        { error: 'Event has already ended' },
         { status: 400 }
       );
     }
-    const user = await User.findOne({ did: attendeeId }); 
+
+    // Get user details for the ticket
+    const user = await User.findOne({ did: attendeeId }); // Use 'did' not 'civicId'
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
@@ -39,6 +42,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user already has a ticket for this event
     const existingTicket = await Ticket.findOne({ 
       eventId: eventId, 
       attendeeId: attendeeId 
@@ -51,7 +55,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const paymentSuccess = Math.random() > 0.1; 
+    // Simulate payment processing
+    const paymentSuccess = Math.random() > 0.1; // 90% success rate for demo
     
     if (!paymentSuccess) {
       return NextResponse.json(
@@ -60,6 +65,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Simulate NFT minting on Solana
     const nftTokenId = `SOL_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const nftMetadata = {
       name: `${event.name} - Ticket`,
@@ -74,7 +80,7 @@ export async function POST(request: NextRequest) {
       ]
     };
 
-
+    // Generate QR code data (in real app, generate actual QR)
     const qrCodeData = `${eventId}-${attendeeId}-${nftTokenId}`;
 
     // Create ticket record with your schema
@@ -99,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     // ✅ UPDATE EVENT TICKET COUNT - This tracks tickets sold per event
     await Event.findByIdAndUpdate(eventId, { 
-      $inc: { ticketsSold: 1 } 
+      $inc: { ticketsSold: 1 } // Increment tickets sold counter
     });
 
     return NextResponse.json({
