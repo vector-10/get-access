@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from "@civic/auth-web3/react";
 import DashboardLayout from "@/app/dashboard/components/DashboardLayout"
-import EditEventModal from 
+import EditEventModal from "@/app/dashboard/components/EditEventModal"
 import { toast } from 'sonner';
 import { FaMapMarkerAlt, FaClock, FaEdit, FaTrash, FaCalendarAlt } from 'react-icons/fa';
 
