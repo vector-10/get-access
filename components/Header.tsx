@@ -86,7 +86,7 @@ export default function Header() {
               )}    
 
               <Link 
-                href={isAuthenticated ? "/dashboard/create-events" : "/auth"}
+                href={isAuthenticated ? "/dashboard" : "/auth"}
                 className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors"
               >
                 Create Events
@@ -141,7 +141,7 @@ export default function Header() {
           )}
 
           <Link 
-            href={isAuthenticated ? "/dashboard/create-events" : "/auth"}
+            href={isAuthenticated ? "/dashboard" : "/auth"}
             className="bg-orange-600 text-white px-8 py-2 rounded hover:bg-orange-700 transition-colors block text-center"
           >
             Create Events
