@@ -5,7 +5,7 @@ import { useUser } from "@civic/auth-web3/react";
 import DashboardLayout from "@/app/dashboard/components/DashboardLayout"
 import EditEventModal from "@/app/dashboard/components/EditEventModal"
 import { toast } from 'sonner';
-import { FaMapMarkerAlt, FaClock, FaEdit, FaTrash, FaCalendarAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaEdit,  FaCalendarAlt, FaShare, FaCopy } from 'react-icons/fa';
 
 interface Event {
   _id: string;
@@ -61,6 +61,24 @@ const Page = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const handleShare = async (eventId: string) => {
+    const shareUrl = `${window.location.origin}/event/${eventId}`;
+    
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success('Event link copied to clipboard!');
+    } catch (error) {
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      toast.success('Event link copied to clipboard!');
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -191,8 +209,12 @@ const Page = () => {
                         Edit
                       </button>
                     </div>
-                    <button className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                      View Details →
+                    <button 
+                      onClick={() => handleShare(event._id)}
+                      className="flex items-center text-orange-600 hover:text-orange-700 text-sm font-medium transition-colors"
+                    >
+                      <FaShare className="mr-1 h-3 w-3" />
+                      Share
                     </button>
                   </div>
                 </div>

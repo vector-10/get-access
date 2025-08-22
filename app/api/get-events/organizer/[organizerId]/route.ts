@@ -9,7 +9,7 @@ export async function GET(
   try {
     await connectDB();
 
-    const { organizerId } = await params;
+    const { organizerId } = params;
     
     if (!organizerId) {
       return NextResponse.json(
