@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/app/lib/mongoose';
-import { Event } from '@/app/models/Event';
-import { Ticket } from '@/app/models/Ticket';
-import { User } from '@/app/models/User';
+import Event from '@/app/models/Event';
+import Ticket from '@/app/models/Ticket';
+import User from '@/app/models/User';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     
     const { eventId, attendeeId, ticketType, price, paymentMethod, walletAddress } = await request.json();
 
-    // Validate required fields
     if (!eventId || !attendeeId || !ticketType || !price) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -18,7 +17,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if event exists and is active
     const event = await Event.findById(eventId);
     if (!event) {
       return NextResponse.json(
@@ -33,9 +31,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Get user details for the ticket
-    const user = await User.findOne({ civicId: attendeeId });
+    const user = await User.findOne({ did: attendeeId }); 
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
@@ -43,7 +39,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already has a ticket for this event
     const existingTicket = await Ticket.findOne({ 
       eventId: eventId, 
       attendeeId: attendeeId 
@@ -56,8 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simulate payment processing
-    const paymentSuccess = Math.random() > 0.1; // 90% success rate for demo
+    const paymentSuccess = Math.random() > 0.1; 
     
     if (!paymentSuccess) {
       return NextResponse.json(
@@ -66,7 +60,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simulate NFT minting on Solana
     const nftTokenId = `SOL_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const nftMetadata = {
       name: `${event.name} - Ticket`,
@@ -81,7 +74,7 @@ export async function POST(request: NextRequest) {
       ]
     };
 
-    // Generate QR code data (in real app, generate actual QR)
+
     const qrCodeData = `${eventId}-${attendeeId}-${nftTokenId}`;
 
     // Create ticket record with your schema
@@ -89,7 +82,7 @@ export async function POST(request: NextRequest) {
       eventId: eventId, // MongoDB ObjectId
       attendeeId: attendeeId,
       attendeeName: user.name,
-      attendeeEmail: user.email || `${user.name}@civic.com`, // Fallback email
+      attendeeEmail: user.name + '@example.com', // Generate email since User model has no email field
       ticketType: ticketType === 'standard' ? 'general' : ticketType, // Map to your enum
       price,
       status: 'confirmed',
@@ -106,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     // ✅ UPDATE EVENT TICKET COUNT - This tracks tickets sold per event
     await Event.findByIdAndUpdate(eventId, { 
-      $inc: { ticketsSold: 1 } // Increment tickets sold counter
+      $inc: { ticketsSold: 1 } 
     });
 
     return NextResponse.json({

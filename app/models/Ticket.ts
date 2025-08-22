@@ -95,9 +95,11 @@ const ticketSchema = new Schema<ITicket>({
   timestamps: true
 });
 
+// Create compound index for unique tickets per user per event
 ticketSchema.index({ eventId: 1, attendeeId: 1 }, { unique: true });
 
+// Index for efficient queries
 ticketSchema.index({ attendeeId: 1, status: 1 });
 ticketSchema.index({ eventId: 1, status: 1 });
 
-export const Ticket = mongoose.models.Ticket || mongoose.model<ITicket>('Ticket', ticketSchema);
+export default mongoose.models.Ticket || mongoose.model<ITicket>('Ticket', ticketSchema);
