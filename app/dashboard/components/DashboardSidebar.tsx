@@ -11,6 +11,7 @@ export default function DashboardSidebar() {
  const navItems = [
    { name: "Overview", href: "/dashboard", icon: FaHome },
    { name: "My Events", href: "/dashboard/my-events", icon: FaUsers },
+   { name: "Attendees", href: "/dashboard/attendees", icon: FaUsers },
  ];
 
  return (
