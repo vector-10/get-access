@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
     
     const events = await Event.find({})
       .sort({ createdAt: -1 }); 
-      console.log(events)
     
     return NextResponse.json({ events });
   } catch (error) {
