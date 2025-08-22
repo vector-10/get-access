@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useUser } from "@civic/auth-web3/react";
 import { toast } from 'sonner';
-import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaTicketAlt, FaHome, FaList } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaTicketAlt, FaHome, FaList, FaCheck, FaSignInAlt } from 'react-icons/fa';
 
 interface Event {
   _id: string;
@@ -18,6 +19,8 @@ interface Event {
 
 export default function EventPage() {
   const params = useParams();
+  const router = useRouter();
+  const { user } = useUser();
   const eventId = params.eventId as string;
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,6 +46,18 @@ export default function EventPage() {
       toast.error('Failed to load event');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSignInToPay = () => {
+    const currentUrl = window.location.pathname;
+    router.push(`/auth?returnUrl=${encodeURIComponent(currentUrl)}`);
+  };
+
+  const handlePurchaseTicket = () => {
+    if (user) {
+      // TODO: Implement payment flow
+      toast.info('Payment integration coming soon!');
     }
   };
 
@@ -192,6 +207,25 @@ export default function EventPage() {
               <div className="bg-orange-50 rounded-lg border border-orange-200 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">Get Your Ticket</h3>
                 
+                {/* Authentication Status */}
+                {user ? (
+                  <div className="mb-4 flex items-center space-x-2 text-sm bg-green-50 text-green-800 px-3 py-2 rounded-lg border border-green-200">
+                    <FaCheck className="h-4 w-4" />
+                    <span className="font-medium">{user.name || 'User'} • Verified</span>
+                  </div>
+                ) : (
+                  <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <p className="text-sm text-yellow-800 mb-3 font-medium">Sign in to purchase tickets</p>
+                    <button
+                      onClick={handleSignInToPay}
+                      className="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors font-medium flex items-center justify-center"
+                    >
+                      <FaSignInAlt className="mr-2" />
+                      Sign in to Pay
+                    </button>
+                  </div>
+                )}
+                
                 <div className="space-y-4 mb-6">
                   <div className="border border-gray-200 rounded-lg p-4 bg-white">
                     <div className="flex justify-between items-center">
@@ -215,9 +249,17 @@ export default function EventPage() {
                   </div>
                 </div>
                 
-                <button className="w-full bg-orange-600 text-white py-4 px-6 rounded-lg hover:bg-orange-700 transition-colors font-semibold text-lg flex items-center justify-center mb-4">
+                <button 
+                  onClick={handlePurchaseTicket}
+                  disabled={!user}
+                  className={`w-full py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center mb-4 transition-all duration-200 ${
+                    user 
+                      ? 'bg-orange-600 text-white hover:bg-orange-700 cursor-pointer shadow-md hover:shadow-lg' 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-75'
+                  }`}
+                >
                   <FaTicketAlt className="mr-3" />
-                  Purchase Ticket
+                  {user ? 'Purchase Ticket' : 'Sign in Required'}
                 </button>
                 
                 <div className="text-center">

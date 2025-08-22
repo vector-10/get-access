@@ -172,13 +172,13 @@ const Process = () => {
                             <ArrowRight className="h-5 w-5" />
                         </Link>
                         
-                        <Link href="/dashboard/create-event" className="text-orange-600 flex items-center justify-around px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-50 transition-colors border-2 border-orange-200">
+                        <Link href="/dashboard" className="text-orange-600 flex items-center justify-around px-8 py-4 rounded-xl text-lg font-semibold hover:bg-orange-50 transition-colors border-2 border-orange-200">
                             <h2>Start Organizing Events</h2>   <ArrowRight className="h-5 w-5" />
                         </Link>
                     </div>
                     
                     <p className="text-sm text-gray-500 mt-6">
-                        Powered by <a href="https://www.civic.com/" className='text-[#6b70fc]'>Civic Auth</a> • Trusted by 50,000+ users • 100% verified organizers
+                        Secured by <a href="https://www.civic.com/" className='text-[#6b70fc]'>Civic Auth</a> • Trusted by 50,000+ users • 100% verified organizers
                     </p>
                 </div>
                 

@@ -5,6 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Ticket, Shield, Zap, Check, Loader2 } from "lucide-react";
 
+
+const userHasWallet = (user: any): boolean => {
+  return user && user.solana && user.solana.address;
+};
+
 function InteractiveGrid() {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -73,17 +78,14 @@ export default function AuthPage() {
       setIsProcessing(true);
 
       try {
-        // Step 1: Authentication successful
         await updateStepStatus('auth', 'loading');
         await delay(800);
         await updateStepStatus('auth', 'completed');
 
-        // Step 2: Identity verification
         await updateStepStatus('verify', 'loading');
         await delay(1000);
         await updateStepStatus('verify', 'completed');
 
-        // Call the API to create/find user
         const res = await fetch("/api/callback", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -96,17 +98,18 @@ export default function AuthPage() {
         const data = await res.json();
         setUserRole(data.user.role);
 
-        // Step 3: Wallet creation (only for new attendees)
-        if (data.user.role === "attendee" && data.isNewUser) {
+        if (data.user.role === "attendee" && !userHasWallet(user)) {
           await updateStepStatus('wallet', 'loading');
+          
+          if (user.createWallet) {
+            await (user.createWallet as Function)();
+          }
+          
           await delay(1200);
           await updateStepStatus('wallet', 'completed');
         } else {
-          // Skip wallet step for organizers or existing users
           setAuthSteps(prev => prev.filter(step => step.id !== 'wallet'));
         }
-
-        // Step 4: Redirect
         await updateStepStatus('redirect', 'loading');
         await delay(800);
         await updateStepStatus('redirect', 'completed');
