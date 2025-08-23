@@ -3,14 +3,26 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
+// Runtime type guard
+function hasOrganizerId(params: any): params is { organizerId: string } {
+  return params && typeof params.organizerId === "string";
+}
+
 export async function GET(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  req: NextRequest,
+  { params }: { params: any } // <- must be `any` for Next.js compatibility
 ) {
   try {
+    if (!hasOrganizerId(params)) {
+      return NextResponse.json(
+        { message: "Invalid or missing organizerId" },
+        { status: 400 }
+      );
+    }
+
     await connectDB();
 
-    const { organizerId } = context.params;
+    const { organizerId } = params;
 
     const events = await Event.find({ organizerId });
     const eventIds = events.map(event => event._id);
@@ -21,22 +33,17 @@ export async function GET(
       event => event.status === "upcoming" || event.status === "ongoing"
     ).length;
 
-    const tickets = await Ticket.find({
-      eventId: { $in: eventIds }
-    });
+    const tickets = await Ticket.find({ eventId: { $in: eventIds } });
 
     const ticketsIssued = tickets.length;
     const ticketsSold = tickets.filter(
-      ticket => ticket.status === "confirmed" || ticket.status === "used"
+      t => t.status === "confirmed" || t.status === "used"
     ).length;
-
-    const ticketsPending = tickets.filter(
-      ticket => ticket.status === "pending"
-    ).length;
+    const ticketsPending = tickets.filter(t => t.status === "pending").length;
 
     const totalRevenue = tickets
-      .filter(ticket => ticket.status === "confirmed" || ticket.status === "used")
-      .reduce((sum, ticket) => sum + ticket.price, 0);
+      .filter(t => t.status === "confirmed" || t.status === "used")
+      .reduce((sum, t) => sum + t.price, 0);
 
     return NextResponse.json({
       metrics: {
@@ -45,8 +52,8 @@ export async function GET(
         ticketsSold,
         activeEvents,
         ticketsPending,
-        totalRevenue
-      }
+        totalRevenue,
+      },
     });
   } catch (error) {
     console.error("Fetch metrics error:", error);
