@@ -2,9 +2,8 @@
 
 import { UserButton, useUser } from "@civic/auth-web3/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { Ticket, Shield, Zap, Check, Loader2 } from "lucide-react";
-
 
 const userHasWallet = (user: any): boolean => {// eslint-disable-line @typescript-eslint/no-explicit-any
   return user && user.solana && user.solana.address;
@@ -56,7 +55,8 @@ interface AuthStep {
   status: 'pending' | 'loading' | 'completed';
 }
 
-export default function AuthPage() {
+// Separate component that uses useSearchParams
+function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useUser();
@@ -101,8 +101,8 @@ export default function AuthPage() {
         if (data.user.role === "attendee" && !userHasWallet(user)) {
           await updateStepStatus('wallet', 'loading');
           
-          if (user.createWallet) {
-            await (user.createWallet as () => Promise<void>)();
+          if (user.createWallet && typeof user.createWallet === 'function') {
+            await user.createWallet();
           }
           
           await delay(1200);
@@ -269,5 +269,18 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component wrapped with Suspense
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }
