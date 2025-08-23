@@ -6,7 +6,8 @@ if (!MONGODB_URI) {
   throw new Error("Please define MONGODB_URI in your .env.local");
 }
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const cached = (global as any).mongoose || { conn: null, promise: null };
 
 export async function connectDB() {
   if (cached.conn) return cached.conn;

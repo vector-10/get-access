@@ -1,23 +1,30 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Menu, X, Ticket } from 'lucide-react'
 import { useUser } from '@civic/auth-web3/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Header() {
   const { user } = useUser()  
-  const router = useRouter()
   const [location, setLocation] = useState('Lagos')
   const [isLoadingLocation, setIsLoadingLocation] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  useEffect(() => {
-    detectUserLocation()
+  const reverseGeocode = useCallback(async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
+      )
+      const data = await response.json()
+      const city = data.address?.city || data.address?.town || data.address?.village || data.address?.state || 'Lagos'
+      return city
+    } catch {
+      throw new Error('Geocoding failed')
+    }
   }, [])
 
-  const detectUserLocation = async () => {
+  const detectUserLocation = useCallback(async () => {
     if (!navigator.geolocation) {
       console.log('Geolocation not supported')
       return
@@ -44,20 +51,11 @@ export default function Header() {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
     )
-  }
+  }, [reverseGeocode])
 
-  const reverseGeocode = async (lat:number, lng:number) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
-      )
-      const data = await response.json()
-      const city = data.address?.city || data.address?.town || data.address?.village || data.address?.state || 'Lagos'
-      return city
-    } catch {
-      throw new Error('Geocoding failed')
-    }
-  }
+  useEffect(() => {
+    detectUserLocation()
+  }, [detectUserLocation])
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
@@ -84,6 +82,11 @@ export default function Header() {
                   ✓ Authenticated
                 </span>
               )}    
+
+              {/* Show location if you want to use it */}
+              {location && !isLoadingLocation && (
+                <span className="text-gray-600 text-sm">📍 {location}</span>
+              )}
 
               <Link 
                 href={isAuthenticated ? "/dashboard" : "/auth"}
@@ -138,6 +141,13 @@ export default function Header() {
             <span className="text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full inline-block">
               ✓ Authenticated
             </span>
+          )}
+
+          {/* Show location in mobile menu too */}
+          {location && !isLoadingLocation && (
+            <div className="text-center">
+              <span className="text-gray-600 text-sm">📍 {location}</span>
+            </div>
           )}
 
           <Link 

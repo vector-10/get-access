@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Ticket, Shield, Zap, Check, Loader2 } from "lucide-react";
 
 
-const userHasWallet = (user: any): boolean => {
+const userHasWallet = (user: any): boolean => {// eslint-disable-line @typescript-eslint/no-explicit-any
   return user && user.solana && user.solana.address;
 };
 
@@ -102,7 +102,7 @@ export default function AuthPage() {
           await updateStepStatus('wallet', 'loading');
           
           if (user.createWallet) {
-            await (user.createWallet as Function)();
+            await (user.createWallet as () => Promise<void>)();
           }
           
           await delay(1200);
@@ -178,7 +178,7 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-4">
-                {authSteps.map((step, index) => (
+                {authSteps.map((step) => (
                   <div 
                     key={step.id}
                     className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-500 ${

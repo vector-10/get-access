@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaHome, FaCalendarPlus, FaUsers } from "react-icons/fa";
+import { FaHome,  FaUsers } from "react-icons/fa";
 
 
 export default function DashboardSidebar() {

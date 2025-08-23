@@ -40,6 +40,7 @@ const AttendeesModal = ({ event, isOpen, onClose }: AttendeesModalProps) => {
     if (isOpen && event._id) {
       fetchAttendees();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, event._id]);
 
   const fetchAttendees = async () => {
@@ -199,6 +200,7 @@ const Page = () => {
     if (user?.id) {
       fetchEvents();
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const fetchEvents = async () => {

@@ -320,6 +320,7 @@ export default function EventPage() {
     if (eventId) {
       fetchEvent();
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
   const fetchEvent = async () => {
@@ -418,6 +419,7 @@ export default function EventPage() {
 
       {/* Hero Image Section */}
       <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={event.imageUrl}
           alt={event.name}

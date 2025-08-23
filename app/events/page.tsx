@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaTicketAlt, FaHome, FaList, FaSearch } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaTicketAlt, FaHome, FaList, FaSearch } from 'react-icons/fa';
 
 interface Event {
   _id: string;
@@ -170,6 +170,7 @@ export default function AllEventsPage() {
                 >
                   {/* Event Image */}
                   <div className="relative h-48 bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={event.imageUrl}
                       alt={event.name}

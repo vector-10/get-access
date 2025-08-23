@@ -37,6 +37,7 @@ const Page = () => {
     if (user?.id) {
       fetchDashboardData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const fetchDashboardData = async () => {

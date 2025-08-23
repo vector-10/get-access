@@ -5,7 +5,7 @@ import { useUser } from "@civic/auth-web3/react";
 import DashboardLayout from "@/app/dashboard/components/DashboardLayout"
 import EditEventModal from "@/app/dashboard/components/EditEventModal"
 import { toast } from 'sonner';
-import { FaMapMarkerAlt, FaEdit,  FaCalendarAlt, FaShare, FaCopy } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaEdit, FaCalendarAlt, FaShare } from 'react-icons/fa';
 
 interface Event {
   _id: string;
@@ -28,6 +28,7 @@ const Page = () => {
     if (user?.id) {
       fetchEvents();
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const fetchEvents = async () => {
@@ -69,7 +70,7 @@ const Page = () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success('Event link copied to clipboard!');
-    } catch (error) {
+    } catch {
       // Fallback for browsers that don't support clipboard API
       const textArea = document.createElement('textarea');
       textArea.value = shareUrl;
@@ -158,6 +159,7 @@ const Page = () => {
               >
                 {/* Event Image */}
                 <div className="relative h-48 bg-gray-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={event.imageUrl}
                     alt={event.name}
