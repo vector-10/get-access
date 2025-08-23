@@ -5,7 +5,8 @@ import Ticket from "@/app/models/Ticket";
 
 export async function GET(
   req: Request,
-  context: any // This is the key - use 'any' for the context
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context: any 
 ) {
   try {
     const { organizerId } = await context.params;
