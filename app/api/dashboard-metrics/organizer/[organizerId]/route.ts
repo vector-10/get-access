@@ -3,18 +3,14 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
-interface Params {
-  organizerId: string;
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: { params: Params } // <-- valid
+  context: { params: Record<string, string> }
 ) {
   try {
     await connectDB();
 
-    const { organizerId } = params;
+    const { organizerId } = context.params;
 
     const events = await Event.find({ organizerId });
     const eventIds = events.map(event => event._id);
