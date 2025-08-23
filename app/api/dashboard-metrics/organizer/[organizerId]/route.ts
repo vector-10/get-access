@@ -5,15 +5,13 @@ import Ticket from "@/app/models/Ticket";
 
 export async function GET(
   req: Request,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context: any 
+  props: { params: Promise<{ organizerId: string }> }
 ) {
   try {
-    const { organizerId } = await context.params;
+    const { organizerId } = await props.params;
     
     await connectDB();
     
-    // Your existing logic:
     const events = await Event.find({ organizerId });
     const eventIds = events.map(e => e._id);
     
@@ -35,6 +33,7 @@ export async function GET(
       .reduce((sum, t) => sum + t.price, 0);
     
     return NextResponse.json({
+      events,
       metrics: {
         eventsOrganized,
         ticketsIssued,
