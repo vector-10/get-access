@@ -3,50 +3,45 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
+type Params = Promise<{ organizerId: string }>;
+
 export async function GET(
   req: Request,
-  context: { params: { organizerId: string } }
+  context: { params: Params }
 ) {
-  try {
-    await connectDB();
+  const { organizerId } = await context.params;
 
-    const { organizerId } = context.params;
+  await connectDB();
 
-    const events = await Event.find({ organizerId });
-    const eventIds = events.map(event => event._id);
+  // Your existing logic:
+  const events = await Event.find({ organizerId });
+  const eventIds = events.map(e => e._id);
 
-    const eventsOrganized = events.length;
-    const activeEvents = events.filter(
-      e => e.status === "upcoming" || e.status === "ongoing"
-    ).length;
+  const eventsOrganized = events.length;
+  const activeEvents = events.filter(
+    e => e.status === "upcoming" || e.status === "ongoing"
+  ).length;
 
-    const tickets = await Ticket.find({ eventId: { $in: eventIds } });
+  const tickets = await Ticket.find({ eventId: { $in: eventIds } });
 
-    const ticketsIssued = tickets.length;
-    const ticketsSold = tickets.filter(
-      t => t.status === "confirmed" || t.status === "used"
-    ).length;
-    const ticketsPending = tickets.filter(t => t.status === "pending").length;
+  const ticketsIssued = tickets.length;
+  const ticketsSold = tickets.filter(
+    t => t.status === "confirmed" || t.status === "used"
+  ).length;
+  const ticketsPending = tickets.filter(t => t.status === "pending").length;
 
-    const totalRevenue = tickets
-      .filter(t => t.status === "confirmed" || t.status === "used")
-      .reduce((sum, t) => sum + t.price, 0);
+  const totalRevenue = tickets
+    .filter(t => t.status === "confirmed" || t.status === "used")
+    .reduce((sum, t) => sum + t.price, 0);
 
-    return NextResponse.json({
-      metrics: {
-        eventsOrganized,
-        ticketsIssued,
-        ticketsSold,
-        activeEvents,
-        ticketsPending,
-        totalRevenue,
-      },
-    });
-  } catch (error) {
-    console.error("Fetch metrics error:", error);
-    return NextResponse.json(
-      { message: "Failed to fetch metrics" },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    metrics: {
+      eventsOrganized,
+      ticketsIssued,
+      ticketsSold,
+      activeEvents,
+      ticketsPending,
+      totalRevenue,
+    },
+  });
 }
