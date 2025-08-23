@@ -3,14 +3,18 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
-
-function hasOrganizerId(params: any): params is { organizerId: string } {// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return params && typeof params.organizerId === "string";
+function hasOrganizerId(params: unknown): params is { organizerId: string } {
+  return (
+    typeof params === "object" &&
+    params !== null &&
+    "organizerId" in params &&
+    typeof (params as { organizerId: unknown }).organizerId === "string"
+  );
 }
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: any } // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { params }: { params: unknown }
 ) {
   try {
     if (!hasOrganizerId(params)) {
