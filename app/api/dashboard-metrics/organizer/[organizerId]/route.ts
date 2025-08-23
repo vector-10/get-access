@@ -3,22 +3,26 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
+interface Params {
+  organizerId: string;
+}
+
 export async function GET(
   request: NextRequest,
-  context: { params: { organizerId: string } }
+  { params }: { params: Params } // <-- valid
 ) {
   try {
     await connectDB();
 
-    const { organizerId } = context.params;
+    const { organizerId } = params;
 
     const events = await Event.find({ organizerId });
     const eventIds = events.map(event => event._id);
 
     const eventsOrganized = events.length;
 
-    const activeEvents = events.filter(event =>
-      event.status === "upcoming" || event.status === "ongoing"
+    const activeEvents = events.filter(
+      event => event.status === "upcoming" || event.status === "ongoing"
     ).length;
 
     const tickets = await Ticket.find({
@@ -26,12 +30,12 @@ export async function GET(
     });
 
     const ticketsIssued = tickets.length;
-    const ticketsSold = tickets.filter(ticket =>
-      ticket.status === "confirmed" || ticket.status === "used"
+    const ticketsSold = tickets.filter(
+      ticket => ticket.status === "confirmed" || ticket.status === "used"
     ).length;
 
-    const ticketsPending = tickets.filter(ticket =>
-      ticket.status === "pending"
+    const ticketsPending = tickets.filter(
+      ticket => ticket.status === "pending"
     ).length;
 
     const totalRevenue = tickets
