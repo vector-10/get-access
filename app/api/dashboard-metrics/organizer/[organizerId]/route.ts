@@ -3,14 +3,14 @@ import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
-// Runtime type guard
-function hasOrganizerId(params: any): params is { organizerId: string } {
+
+function hasOrganizerId(params: any): params is { organizerId: string } {// eslint-disable-next-line @typescript-eslint/no-explicit-any
   return params && typeof params.organizerId === "string";
 }
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: any } // <- must be `any` for Next.js compatibility
+  { params }: { params: any } // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) {
   try {
     if (!hasOrganizerId(params)) {
