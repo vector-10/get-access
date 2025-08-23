@@ -1,40 +1,23 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongoose";
 import Event from "@/app/models/Event";
 import Ticket from "@/app/models/Ticket";
 
-function hasOrganizerId(params: unknown): params is { organizerId: string } {
-  return (
-    typeof params === "object" &&
-    params !== null &&
-    "organizerId" in params &&
-    typeof (params as { organizerId: unknown }).organizerId === "string"
-  );
-}
-
 export async function GET(
-  req: NextRequest,
-  { params }: { params: unknown }
+  req: Request,
+  context: { params: { organizerId: string } }
 ) {
   try {
-    if (!hasOrganizerId(params)) {
-      return NextResponse.json(
-        { message: "Invalid or missing organizerId" },
-        { status: 400 }
-      );
-    }
-
     await connectDB();
 
-    const { organizerId } = params;
+    const { organizerId } = context.params;
 
     const events = await Event.find({ organizerId });
     const eventIds = events.map(event => event._id);
 
     const eventsOrganized = events.length;
-
     const activeEvents = events.filter(
-      event => event.status === "upcoming" || event.status === "ongoing"
+      e => e.status === "upcoming" || e.status === "ongoing"
     ).length;
 
     const tickets = await Ticket.find({ eventId: { $in: eventIds } });
