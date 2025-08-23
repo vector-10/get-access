@@ -4,26 +4,28 @@ import Event from "@/app/models/Event";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { organizerId: string } }
+  { params }: { params: Promise<{ organizerId: string }> }
 ) {
   try {
     await connectDB();
-
-    const { organizerId } = params;
+    
+    const { organizerId } = await params; // Must await in Next.js 15
     
     if (!organizerId) {
       return NextResponse.json(
-        { message: "Organizer ID is required" }, 
+        { message: "Organizer ID is required" },
         { status: 400 }
       );
-    }    
-    const events = await Event.find({ organizerId: params.organizerId })
+    }
+    
+    const events = await Event.find({ organizerId })
       .sort({ createdAt: -1 });
+      
     return NextResponse.json({ events });
   } catch (error) {
     console.error("Fetch events error:", error);
     return NextResponse.json(
-      { message: "Failed to fetch events" }, 
+      { message: "Failed to fetch events" },
       { status: 500 }
     );
   }
