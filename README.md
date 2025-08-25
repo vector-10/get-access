@@ -91,7 +91,6 @@ A modern event ticketing platform built with Web3 technology, featuring Civic Au
 2. Select ticket type and quantity
 3. Pay with Solana (SOL) from embedded wallet
 4. Receive NFT ticket with metadata
-5. Automatic QR code generation
 
 ### NFT Tickets
 - Each ticket is minted as a unique NFT
